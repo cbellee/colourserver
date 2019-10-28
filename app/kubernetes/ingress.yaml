@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: http-https-echo-ing
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - host: myapp.k3s.cluster.local
+    http:
+      paths:
+      - backend:
+          serviceName: http-https-echo-svc
+          servicePort: 80
