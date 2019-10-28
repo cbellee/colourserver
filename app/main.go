@@ -1,14 +1,17 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"sort"
 )
 
 type Page struct {
-	Colour         string
+	Colour        string
 	EnvVars       []string
 	Headers       []string
 	Host          string
@@ -17,18 +20,34 @@ type Page struct {
 	HostName      string
 }
 
+var (
+	colourFlag   = flag.String("colour", "red", "web page background-color")
+	validColours = []string{"red", "green", "blue"}
+)
+
+func contains(a []string, b string) bool {
+	for _, s := range a {
+		if b == s {
+			return true
+		}
+	}
+	return false
+}
+
 func viewHandler(w http.ResponseWriter, r *http.Request) {
-	colour := r.URL.Path[len("/view/"):]
+	colour := colourFlag //r.URL.Path[len("/view/"):]
 	envVars := make([]string, len(os.Environ()))
 	headers := make([]string, len(r.Header))
 	hostName, err := os.Hostname()
-	if err!=nil {
+	if err != nil {
 		hostName = ""
 	}
 
 	for _, env := range os.Environ() {
 		envVars = append(envVars, env)
 	}
+
+	sort.Strings(envVars)
 
 	for name, values := range r.Header {
 		for _, value := range values {
@@ -37,7 +56,9 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	renderTemplate(w, colour, &Page{Colour: colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
+	sort.Strings(headers)
+
+	renderTemplate(w, *colour, &Page{Colour: *colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
@@ -53,7 +74,14 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 }
 
 func main() {
-	http.HandleFunc("/view/", viewHandler)
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	flag.Parse()
+	// validate colour flag
+	if contains(validColours, *colourFlag) {
+		http.HandleFunc("/", viewHandler)
+		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+		log.Fatal(http.ListenAndServe(":8080", nil))
+	} else {
+		fmt.Fprintln(os.Stderr, "missing colour option! (red, green, blue)")
+		os.Exit(127)
+	}
 }
