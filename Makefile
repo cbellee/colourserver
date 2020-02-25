@@ -3,6 +3,7 @@ SEMVER := $(shell cat ./version)
 BUILD_DATE := $(shell date -R)
 NAME := $(shell basename `git rev-parse --show-toplevel`)
 VENDOR := $(shell whoami)
+ENV := dev
 
 print:
 	@echo VERSION=${VERSION}
@@ -13,23 +14,19 @@ print:
 
 build:
 	docker build \
-	-t colourserver:${SEMVER} \
+	-t belstarr/colourserver:${ENV}-${SEMVER} \
 	--build-arg VERSION="${VERSION}" \
 	--build-arg SEMVER="${SEMVER}" \
 	--build-arg BUILD_DATE="${BUILD_DATE}" \
 	--build-arg NAME="${NAME}" \
 	--build-arg VENDOR="${VENDOR}" .
 
-tag:
-	docker tag \
-	colourserver:${SEMVER} belstarr/colourserver:${SEMVER}
-
 push:
-	docker push belstarr/colourserver:${SEMVER}
+	docker push belstarr/colourserver:${ENV}-${SEMVER}
 
 run:
 	docker run \
 	-d \
 	-p 8080:80 \
 	-e VERSION=${SEMVER} \
-	colourserver:${SEMVER} 
+	belstarr/colourserver:${ENV}-${SEMVER}
