@@ -5,8 +5,7 @@ VENDOR := $(shell whoami)
 SEMVER := 0.1.4 #$(shell cat ./app/semver)
 #ENV := dev
 COLOUR := green
-BUILDID := $(strip ${BUILD_BUILDID})
-TAG := "${ENVIRONMENT}-${SEMVER}${BUILDID}"
+TAG := $(strip "${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}")
 
 print:
 	@echo VERSION=${VERSION}
