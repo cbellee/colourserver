@@ -2,9 +2,9 @@ VERSION := $(shell git rev-parse --short HEAD)
 BUILD_DATE := $(shell date -R)
 NAME := $(shell basename `git rev-parse --show-toplevel`)
 VENDOR := $(shell whoami)
-SEMVER := 0.1.3 #$(shell cat ./app/semver)
+SEMVER := 0.1.4 #$(shell cat ./app/semver)
 ENV := dev
-COLOUR := blue
+COLOUR := green
 
 print:
 	@echo VERSION=${VERSION}

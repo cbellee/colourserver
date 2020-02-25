@@ -5,6 +5,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /main .
 
 FROM alpine:latest
 ARG SEMVER
+ENV VERSION=${SEMVER}
 ARG COLOUR
 ENV COLOUR=${COLOUR}
 RUN apk --no-cache add ca-certificates
