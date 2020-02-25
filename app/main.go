@@ -22,8 +22,8 @@ type page struct {
 }
 
 var (
-	colourFlag   = flag.String("colour", "red", "web page background-color")
-	versionFlag  = flag.String("version", "0.1.0", "container version")
+	colour       = os.Getenv("COLOUR")
+	version      = os.Getenv("VERSION")
 	validColours = []string{"red", "green", "blue"}
 )
 
@@ -37,8 +37,7 @@ func contains(a []string, b string) bool {
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
-	colour := colourFlag
-	version := versionFlag
+
 	envVars := make([]string, len(os.Environ()))
 	headers := make([]string, len(r.Header))
 	hostName, err := os.Hostname()
@@ -61,7 +60,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 
 	sort.Strings(headers)
 
-	renderTemplate(w, *colour, &page{Version: *version, Colour: *colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
+	renderTemplate(w, colour, &page{Version: version, Colour: colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *page) {
@@ -79,7 +78,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *page) {
 func main() {
 	flag.Parse()
 	// validate colour flag
-	if contains(validColours, *colourFlag) {
+	if contains(validColours, colour) {
 		http.HandleFunc("/", viewHandler)
 		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 		log.Fatal(http.ListenAndServe(":80", nil))
