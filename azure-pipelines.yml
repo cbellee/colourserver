@@ -9,14 +9,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 variables:
-  environment: dev
+  environmentName: dev
   serviceConnection: 'Azure CXP FTA Internal Subscription CBELLEE (b2375b5f-8dab-4436-b87c-32bc7fdce5d0)'
-  version.Major: 0
-  version.Minor: 1
-  version.Patch: 0
-  version.Revision: $[counter(variables['version.Patch'], 0)]
-  imageVersion: "$(version.Major).$(version.Minor).$(version.Patch).$(Build.BuildId)"
-  imageName: $(Build.Repository.Name)
 
 steps:
 - task: Docker@2
