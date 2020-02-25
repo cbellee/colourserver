@@ -24,6 +24,15 @@ steps:
   inputs:
     command: login
     containerRegistry: belstarr.docker.io
+
+- task: Bash@3
+  name: dumpEnvVars
+  displayName: Run 'Dump environment variables'
+  inputs:
+    targetType: inline
+    script: |
+      printenv
+
 - task: Bash@3
   name: runMakeBuild
   displayName: Run 'make build'
