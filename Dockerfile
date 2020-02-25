@@ -9,5 +9,5 @@ COPY --from=builder /main ./
 COPY --from=builder /app/html ./html 
 COPY --from=builder /app/css ./css 
 RUN chmod +x ./main
-ENTRYPOINT ["/bin/ash", "-c", "./main -colour=$COLOUR"]
+ENTRYPOINT ["/bin/ash", "-c", "./main -colour=blue"]
 EXPOSE 8080

@@ -10,7 +10,7 @@ import (
 	"sort"
 )
 
-type Page struct {
+type page struct {
 	Colour        string
 	EnvVars       []string
 	Headers       []string
@@ -18,10 +18,12 @@ type Page struct {
 	RequestURI    string
 	ClientAddress string
 	HostName      string
+	Version       string
 }
 
 var (
-	colourFlag   = flag.String("colour", "red", "web page background-color")
+	colourFlag = flag.String("colour", "red", "web page background-color")
+	//versionFlag  = flag.String("version", "0.1.0", "container version")
 	validColours = []string{"red", "green", "blue"}
 )
 
@@ -35,7 +37,8 @@ func contains(a []string, b string) bool {
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
-	colour := colourFlag //r.URL.Path[len("/view/"):]
+	colour := colourFlag
+	//version := versionFlag
 	envVars := make([]string, len(os.Environ()))
 	headers := make([]string, len(r.Header))
 	hostName, err := os.Hostname()
@@ -58,10 +61,10 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 
 	sort.Strings(headers)
 
-	renderTemplate(w, *colour, &Page{Colour: *colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
+	renderTemplate(w, *colour, &page{Colour: *colour, EnvVars: envVars, Headers: headers, ClientAddress: r.RemoteAddr, RequestURI: r.URL.RequestURI(), HostName: hostName})
 }
 
-func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
+func renderTemplate(w http.ResponseWriter, tmpl string, p *page) {
 	t, err := template.ParseFiles("html/" + "main.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -79,7 +82,7 @@ func main() {
 	if contains(validColours, *colourFlag) {
 		http.HandleFunc("/", viewHandler)
 		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-		log.Fatal(http.ListenAndServe(":8080", nil))
+		log.Fatal(http.ListenAndServe(":80", nil))
 	} else {
 		fmt.Fprintln(os.Stderr, "missing colour option! (red, green, blue)")
 		os.Exit(127)
