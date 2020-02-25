@@ -18,7 +18,7 @@ print:
 build:
 	docker build \
 	-t belstarr/colourserver:${TAG} \
-	--build-arg VERSION="${VERSION}" \
+	--build-arg VERSION="${TAG}" \
 	--build-arg SEMVER="${SEMVER}" \
 	--build-arg COLOUR="${COLOUR}" \
 	--build-arg BUILD_DATE="${BUILD_DATE}" \
@@ -32,5 +32,5 @@ run:
 	docker run \
 	-d \
 	-p 8080:80 \
-	-e VERSION=${SEMVER} \
+	-e VERSION=${TAG} \
 	belstarr/colourserver:${TAG}
