@@ -5,7 +5,7 @@ VENDOR := $(shell whoami)
 SEMVER := 0.1.4 #$(shell cat ./app/semver)
 #ENV := dev
 COLOUR := green
-TAG := "${ENVIRONMENT}-${SEMVER}\.${BUILD_BUILDID}"
+#TAG := "${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}"
 
 print:
 	@echo VERSION=${VERSION}
@@ -17,7 +17,7 @@ print:
 
 build:
 	docker build \
-	-t belstarr/colourserver:${TAG} \
+	-t belstarr/colourserver:"${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}" \
 	--build-arg VERSION="${VERSION}" \
 	--build-arg SEMVER="${SEMVER}" \
 	--build-arg COLOUR="${COLOUR}" \
@@ -26,11 +26,11 @@ build:
 	--build-arg VENDOR="${VENDOR}" .
 
 push:
-	docker push belstarr/colourserver:${TAG}
+	docker push belstarr/colourserver:"${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}"
 
 run:
 	docker run \
 	-d \
 	-p 8080:80 \
 	-e VERSION=${SEMVER} \
-	belstarr/colourserver:${TAG}
+	belstarr/colourserver:"${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}"
