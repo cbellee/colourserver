@@ -1,0 +1,50 @@
+# Build Pipeline
+# cbellee.colourserver
+
+trigger:
+  branches:
+    include:
+    - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+variables:
+  environment: dev
+  serviceConnection: 'Azure CXP FTA Internal Subscription CBELLEE (b2375b5f-8dab-4436-b87c-32bc7fdce5d0)'
+  version.Major: 0
+  version.Minor: 1
+  version.Patch: 0
+  version.Revision: $[counter(variables['version.Patch'], 0)]
+  imageVersion: "$(version.Major).$(version.Minor).$(version.Patch).$(Build.BuildId)"
+  imageName: $(Build.Repository.Name)
+
+steps:
+- task: Docker@2
+  displayName: Login to Docker Hub
+  inputs:
+    command: login
+    containerRegistry: belstarr.docker.io
+
+- task: Bash@3
+  name: dumpEnvVars
+  displayName: Run 'Dump environment variables'
+  inputs:
+    targetType: inline
+    script: |
+      printenv
+
+- task: Bash@3
+  name: runMakeBuild
+  displayName: Run 'make build'
+  inputs:
+    targetType: inline
+    script: |
+      make build
+
+- task: Bash@3
+  name: runMakePush
+  displayName: Run 'make push'
+  inputs:
+    targetType: inline
+    script: |
+      make push
