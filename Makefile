@@ -16,7 +16,7 @@ print:
 
 build:
 	docker build \
-	-t belstarr/colourserver:${ENV}-${SEMVER} \
+	-t belstarr/colourserver:${ENV}-${SEMVER}.${BUILD_BUILDID} \
 	--build-arg VERSION="${VERSION}" \
 	--build-arg SEMVER="${SEMVER}" \
 	--build-arg COLOUR="${COLOUR}" \
@@ -25,11 +25,11 @@ build:
 	--build-arg VENDOR="${VENDOR}" .
 
 push:
-	docker push belstarr/colourserver:${ENV}-${SEMVER}
+	docker push belstarr/colourserver:${ENV}-${SEMVER}.${BUILD_BUILDID}
 
 run:
 	docker run \
 	-d \
 	-p 8080:80 \
 	-e VERSION=${SEMVER} \
-	belstarr/colourserver:${ENV}-${SEMVER}
+	belstarr/colourserver:${ENV}-${SEMVER}.${BUILD_BUILDID}
