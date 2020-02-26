@@ -4,7 +4,7 @@ NAME := $(shell basename `git rev-parse --show-toplevel`)
 VENDOR := $(shell whoami)
 SEMVER := 0.1.4
 ENVIRONMENT := dev
-COLOUR := green
+COLOUR := blue
 TAG := ${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}
 
 print:
