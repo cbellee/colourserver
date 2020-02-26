@@ -24,7 +24,7 @@ type page struct {
 var (
 	colour       = os.Getenv("COLOUR")
 	version      = os.Getenv("VERSION")
-	validColours = []string{"red", "green", "blue"}
+	validColours = []string{"red", "green", "blue", "yellow"}
 )
 
 func contains(a []string, b string) bool {
