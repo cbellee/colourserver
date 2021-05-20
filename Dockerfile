@@ -8,11 +8,8 @@ ARG VERSION
 ARG COLOUR
 ENV VERSION=${VERSION}
 ENV COLOUR=${COLOUR}
-# RUN apk --no-cache add ca-certificates
 COPY --from=builder /main ./
 COPY --from=builder /app/html ./html 
 COPY --from=builder /app/css ./css
-# RUN chmod +x ./main
-# ENTRYPOINT ["/bin/ash", "-c", "./main"]
 ENTRYPOINT ["./main"]
 EXPOSE 80
