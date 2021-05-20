@@ -83,7 +83,7 @@ func main() {
 		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 		log.Fatal(http.ListenAndServe(":80", nil))
 	} else {
-		fmt.Fprintln(os.Stderr, "missing colour option! (red, green, blue)")
+		fmt.Fprintln(os.Stderr, "missing colour option! ('red', 'green', 'blue', 'yellow')")
 		os.Exit(127)
 	}
 }

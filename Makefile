@@ -2,10 +2,10 @@ VERSION := $(shell git rev-parse --short HEAD)
 BUILD_DATE := $(shell date -R)
 NAME := $(shell basename `git rev-parse --show-toplevel`)
 VENDOR := $(shell whoami)
-SEMVER := 0.1.4
+SEMVER := 0.1.8
 ENVIRONMENT := dev
 COLOUR := green
-TAG := ${ENVIRONMENT}-${SEMVER}.${BUILD_BUILDID}
+TAG := ${ENVIRONMENT}-${SEMVER}
 
 print:
 	@echo VERSION=${VERSION}
@@ -33,4 +33,5 @@ run:
 	-d \
 	-p 8080:80 \
 	-e VERSION=${TAG} \
+	-e COLOUR="blue" \
 	belstarr/colourserver:${TAG}
