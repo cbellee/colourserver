@@ -10,6 +10,5 @@ ENV VERSION=${VERSION}
 ENV COLOUR=${COLOUR}
 COPY --from=builder /main ./
 COPY --from=builder /app/html ./html 
-COPY --from=builder /app/css ./css
 ENTRYPOINT ["./main"]
 EXPOSE 80
