@@ -80,7 +80,7 @@ func main() {
 	// validate colour flag
 	if contains(validColours, colour) {
 		http.HandleFunc("/", viewHandler)
-		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+		http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 		log.Fatal(http.ListenAndServe(":80", nil))
 	} else {
 		fmt.Fprintln(os.Stderr, "missing colour option! ('red', 'green', 'blue', 'yellow')")
