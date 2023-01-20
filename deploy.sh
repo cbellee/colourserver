@@ -25,7 +25,7 @@ ACR_NAME=`az deployment group create \
     --resource-group $RESOURCE_GROUP \
     --template-file ./modules/acr.bicep \
     --query properties.outputs.acrName.value \
-     --output tsv`
+    --output tsv`
 
 # build and push the 'blue' & 'green' container images
 if [[ $skipBuild != 1 ]]; then
