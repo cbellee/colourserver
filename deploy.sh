@@ -7,14 +7,14 @@ while getopts ":s" option; do
 done
 
 LOCATION='australiaeast'
-ACA_APP_NAME='colour-server'
+ACA_APP_NAME='aca-traffic-split-demo'
 RESOURCE_GROUP="$ACA_APP_NAME-rg"
 ACA_ENVIRONMENT="$ACA_APP_NAME-env"
 
 BLUE_VERSION='0.1.0'
 GREEN_VERSION='0.1.1'
-BLUE_IMAGE_NAME="blue-$ACA_APP_NAME:0.1.0"
-GREEN_IMAGE_NAME="green-$ACA_APP_NAME:0.1.1"
+BLUE_IMAGE_NAME="blue-server:0.1.0"
+GREEN_IMAGE_NAME="green-server:0.1.1"
 
 # crete resource group
 az group create --name $RESOURCE_GROUP --location $LOCATION
